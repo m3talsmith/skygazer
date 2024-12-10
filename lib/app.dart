@@ -1,13 +1,13 @@
-import 'package:bluesky/providers/auth.dart';
-import 'package:bluesky/views/feed.dart';
-import 'package:bluesky/views/login.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skygazer/views/app_bar_header.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'providers/auth.dart';
 import 'providers/preferences.dart';
 import 'providers/window.dart';
+import 'views/auth/login.dart';
+import 'views/feed.dart';
 import 'window.dart';
 
 class App extends ConsumerStatefulWidget {
@@ -84,28 +84,12 @@ class _AppState extends ConsumerState<App> with WindowListener {
           final fullscreen = ref.watch(fullscreenProvider);
           // final size = MediaQuery.of(context).size;
 
-          return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: const Text('Skygazer'),
-              actions: [
-                if (!kIsWeb)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: IconButton(
-                        onPressed: () {
-                          windowManager.setFullScreen(!fullscreen);
-                          ref.watch(fullscreenProvider.notifier).state =
-                              !fullscreen;
-                        },
-                        icon: Icon(fullscreen
-                            ? Icons.fullscreen_exit_rounded
-                            : Icons.fullscreen_rounded)),
-                  )
-              ],
-            ),
-            body: auth == null ? const Login() : const Feed(),
-          );
+          return (auth == null)
+              ? const Login()
+              : Scaffold(
+                  appBar: AppBarHeader(),
+                  body: const Feed(),
+                );
         },
       ),
     );
