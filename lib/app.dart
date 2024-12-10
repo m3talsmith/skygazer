@@ -74,7 +74,7 @@ class _AppState extends ConsumerState<App> with WindowListener {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Bluesky',
+      title: 'Skygazer',
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.amber,
@@ -87,7 +87,7 @@ class _AppState extends ConsumerState<App> with WindowListener {
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: const Text('Bluesky'),
+              title: const Text('Skygazer'),
               actions: [
                 if (!kIsWeb)
                   Padding(
