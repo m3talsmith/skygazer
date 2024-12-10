@@ -1,7 +1,7 @@
 import 'package:atproto/core.dart';
 
 class Auth {
-  Auth({required this.session});
+  Auth({this.session});
 
-  final Session session;
+  final Session? session;
 }

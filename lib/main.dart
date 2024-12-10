@@ -29,7 +29,12 @@ void main() async {
     }
   }
 
+  /// Atproto init
+  // final response = ATProto.anonymous();
+  // final auth = Auth(session: response.session);
+
   final overrides = [
+    // authProvider.overrideWith((ref) => auth),
     fullscreenProvider.overrideWith((ref) => isFullscreen),
     preferencesProvider.overrideWith((ref) => preferences),
   ];

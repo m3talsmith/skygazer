@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:atproto/atproto.dart' as at;
+import 'package:atproto_core/atproto_core.dart' as atcore;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skygazer/views/app_bar_header.dart';
@@ -15,6 +19,28 @@ class _RegisterState extends ConsumerState<Register> {
   String? handle;
   String? email;
   String? password;
+
+  submit(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    if (handle == null || email == null || password == null) {
+      messenger.showSnackBar(const SnackBar(
+        content: Text('Missing handle, email, or password'),
+        showCloseIcon: true,
+      ));
+      return;
+    }
+    try {
+      final ctx = atcore.ServiceContext();
+      final response = await at.ServerService(ctx)
+          .createAccount(handle: handle!, email: email!, password: password!);
+      log('[DEBUG] registration response: ${response.data}');
+    } catch (err) {
+      messenger.showSnackBar(SnackBar(
+        content: Text(err.toString()),
+        showCloseIcon: true,
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +76,7 @@ class _RegisterState extends ConsumerState<Register> {
                         label: Text('Email'),
                       ),
                       onChanged: (value) => setState(() {
-                        handle = value;
+                        email = value;
                       }),
                     ),
                     TextFormField(
@@ -58,14 +84,19 @@ class _RegisterState extends ConsumerState<Register> {
                         icon: Icon(Icons.password_rounded),
                         label: Text('Password'),
                       ),
-                      onChanged: (value) => setState(() {
-                        handle = value;
-                      }),
+                      obscureText: true,
+                      onChanged: (value) => setState(
+                        () {
+                          password = value;
+                        },
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: FilledButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await submit(context);
+                        },
                         child: const Text('Register'),
                       ),
                     )
